@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_bloc/app/constant/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'app/app.dart';
 import 'core/core.dart';
 
