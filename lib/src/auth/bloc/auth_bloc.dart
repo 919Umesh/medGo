@@ -1,11 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_bloc/src/auth/repository/auth_repo.dart';
-import '../../../core/injection/injection_helper.dart';
-import '../../../core/services/sharepref/flutter_secure_storage.dart';
-
 part 'auth_event.dart';
 part 'auth_state.dart';
 
