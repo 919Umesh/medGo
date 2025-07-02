@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:project_bloc/core/injection/injection_helper.dart';
+import 'package:project_bloc/core/services/sharepref/share_pref.dart';
 import 'package:project_bloc/src/auth/repository/auth_repo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -27,7 +30,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         userId: result.userId!,
         email: result.email,
       ));
-      Fluttertoast.showToast(msg: result.userId.toString());
+      locator<PrefHelper>().setIsLogin(true);
+      Fluttertoast.showToast(
+        msg: locator<PrefHelper>().getIsLogin().toString(),
+      );
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }
