@@ -155,9 +155,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           children: [
                             const Text("Don't have an account?"),
                             TextButton(
-                              onPressed: () {
-                                // Add navigation to sign up screen
-                              },
+                              onPressed: () {},
                               child: const Text('Sign Up'),
                             ),
                           ],

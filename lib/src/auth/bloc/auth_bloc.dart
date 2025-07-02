@@ -9,7 +9,11 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
 
-  AuthBloc(this._authRepository) : super(AuthInitial()) {
+  // Default constructor using singleton
+  AuthBloc() : this._(AuthRepository.instance);
+
+  // Private constructor for dependency injection
+  AuthBloc._(this._authRepository) : super(AuthInitial()) {
     on<SignIn>(_onSignIn);
   }
 
@@ -19,7 +23,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       email: event.email,
       password: event.password,
     );
-
     if (result.error != null) {
       emit(AuthError(result.error!));
     } else if (result.userId != null) {

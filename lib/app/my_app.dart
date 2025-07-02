@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:project_bloc/src/auth/bloc/auth_bloc.dart';
-import 'package:project_bloc/src/auth/repository/auth_repo.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../src/splash/splash.dart';
 import 'app.dart';
 
@@ -15,11 +13,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => SplashBloc()),
-        BlocProvider(
-          create: (context) => AuthBloc(
-            AuthRepository(Supabase.instance.client),
-          ),
-        ),
+        BlocProvider(create: (context) => AuthBloc()), // Simple initialization
       ],
       child: OKToast(
         child: MaterialApp(
