@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_bloc/src/auth/bloc/auth_bloc.dart';
+import 'package:project_bloc/src/home/ui/home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -36,11 +37,20 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Fluttertoast.showToast(msg: "fdfd");
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthError) {
+          if (state is Authenticated) {
+            Fluttertoast.showToast(
+                msg: state.message, backgroundColor: Colors.green);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(userId: state.userId),
+                ),
+              );
+            });
+          } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
@@ -52,7 +62,6 @@ class _AuthScreenState extends State<AuthScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const FlutterLogo(size: 100),
@@ -127,7 +136,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () {
-                              // Add forgot password logic
+                              // TODO: Implement forgot password flow
                             },
                             child: const Text('Forgot Password?'),
                           ),
@@ -141,7 +150,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                 child: SizedBox(
                                   height: 24,
                                   width: 24,
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               );
                             }
@@ -157,7 +169,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           children: [
                             const Text("Don't have an account?"),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                // TODO: Navigate to Sign Up screen
+                              },
                               child: const Text('Sign Up'),
                             ),
                           ],
