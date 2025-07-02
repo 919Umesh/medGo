@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_bloc/src/auth/bloc/auth_bloc.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -35,6 +36,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Fluttertoast.showToast(msg: "fdfd");
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
