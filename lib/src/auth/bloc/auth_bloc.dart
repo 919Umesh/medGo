@@ -31,9 +31,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: result.email,
       ));
       locator<PrefHelper>().setIsLogin(true);
-      Fluttertoast.showToast(
-        msg: locator<PrefHelper>().getIsLogin().toString(),
-      );
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }
