@@ -25,14 +25,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
-
-      // Store authentication data (like LoginBloc does)
-      locator<SecureStorageHelper>().setIsLogin(true);
-      locator<SecureStorageHelper>().setUserCode(result.userId!);
-
-      debugPrint('------------Success------------');
-      debugPrint(result.userId!);
-
       emit(Authenticated(
         message: 'Authentication successful',
         userId: result.userId!,
