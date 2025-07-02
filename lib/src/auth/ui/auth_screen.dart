@@ -40,7 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
         listener: (context, state) {
           if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
+              SnackBar(content: Text(state.message)),
             );
           }
         },
