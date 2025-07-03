@@ -66,7 +66,7 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(height: 24),
           _buildProfileItem('Full Name', profile.fullName),
           _buildProfileItem('Email', profile.email),
-          _buildProfileItem('Phone', profile.phoneNumber),
+          _buildProfileItem('Phone', profile.phoneNumber.toString()),
           _buildProfileItem('Gender', profile.gender),
           _buildProfileItem('Member Since',
               '${profile.createdAt.day}/${profile.createdAt.month}/${profile.createdAt.year}'),
