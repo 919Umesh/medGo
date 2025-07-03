@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:project_bloc/app/routes/route_name.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userId;
@@ -16,6 +17,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoute.profileScreenPath);
+              },
+              icon: Icon(Icons.add))
+        ],
       ),
     );
   }

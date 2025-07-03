@@ -19,12 +19,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
+      locator<PrefHelper>().setIsLogin(true);
+      locator<PrefHelper>().setUserToken(result.userId.toString());
       emit(Authenticated(
         message: 'Authentication successful',
         userId: result.userId!,
         email: result.email,
       ));
-      locator<PrefHelper>().setIsLogin(true);
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }
