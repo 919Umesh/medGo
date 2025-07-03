@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:project_bloc/src/auth/bloc/auth_bloc.dart';
+import 'package:project_bloc/src/profile/profile.dart';
 import '../src/splash/splash.dart';
 import 'app.dart';
 
@@ -14,6 +15,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => SplashBloc()),
         BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => ProfileBloc()),
+        //ProfileBloc
       ],
       child: OKToast(
         child: MaterialApp(

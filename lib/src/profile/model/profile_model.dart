@@ -1,4 +1,3 @@
-// lib/src/profile/model/profile_model.dart
 class ProfileModel {
   final String profileId;
   final DateTime createdAt;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:project_bloc/src/auth/ui/auth_screen.dart';
+import 'package:project_bloc/src/profile/ui/profile_screen.dart';
 import '../../src/splash/splash.dart';
 import 'route_name.dart';
 
@@ -11,6 +12,8 @@ class RouteGenerator {
         return _pageTransition(child: const SplashScreen());
       case AppRoute.authScreenPath:
         return _pageTransition(child: const AuthScreen());
+      case AppRoute.profileScreenPath:
+        return _pageTransition(child: const ProfileScreen());
 
       default:
         return _pageTransition(
