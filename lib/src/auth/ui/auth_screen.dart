@@ -178,8 +178,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-
-                      // Sign In Button
                       BlocBuilder<AuthBloc, AuthState>(
                         builder: (context, state) {
                           return ElevatedButton(
@@ -215,8 +213,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         },
                       ),
                       const SizedBox(height: 32),
-
-                      // Sign Up option
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -227,9 +223,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {
-                              // TODO: Navigate to Sign Up
-                            },
+                            onPressed: () {},
                             child: Text(
                               'Sign Up',
                               style: GoogleFonts.poppins(

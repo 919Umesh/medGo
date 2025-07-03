@@ -1,19 +1,14 @@
+// lib/src/auth/bloc/auth_bloc.dart
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_bloc/core/injection/injection_helper.dart';
 import 'package:project_bloc/core/services/sharepref/share_pref.dart';
 import 'package:project_bloc/src/auth/repository/auth_repo.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository _authRepository;
-
-  AuthBloc({required AuthRepository authRepository})
-      : _authRepository = authRepository,
-        super(AuthInitial()) {
+  AuthBloc() : super(AuthInitial()) {
     on<SignIn>(_onSignIn);
   }
 
@@ -21,7 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
 
     try {
-      final result = await _authRepository.signInWithEmailAndPassword(
+      final result = await AuthRepository().signInWithEmailAndPassword(
         email: event.email,
         password: event.password,
       );
