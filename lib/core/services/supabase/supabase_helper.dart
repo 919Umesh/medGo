@@ -4,7 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseHelper {
   static final SupabaseClient _client = Supabase.instance.client;
 
-  // Generic single record fetch
   static Future<Map<String, dynamic>> fetchSingle({
     required String table,
     String column = 'id',
@@ -17,7 +16,6 @@ class SupabaseHelper {
     }
   }
 
-  // Generic multiple records fetch
   static Future<List<dynamic>> fetchAll({
     required String table,
     Map<String, dynamic>? filters,
@@ -31,7 +29,6 @@ class SupabaseHelper {
     }
   }
 
-  // Generic upsert
   static Future<Map<String, dynamic>> upsert({
     required String table,
     required Map<String, dynamic> data,
@@ -43,7 +40,6 @@ class SupabaseHelper {
     }
   }
 
-  // Authentication
   static Future<Map<String, dynamic>> signInWithPassword({
     required String email,
     required String password,
