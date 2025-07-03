@@ -54,4 +54,16 @@ class PrefHelper {
     var pref = await _initializePrefs;
     return pref.getBool(_kIsLogin) ?? false;
   }
+
+  final String _kUserToken = "UserToken"; // You can change this key as needed
+
+  Future<void> setUserToken(String value) async {
+    var pref = await _initializePrefs;
+    pref.setString(_kUserToken, value);
+  }
+
+  Future<String?> getUserToken() async {
+    var pref = await _initializePrefs;
+    return pref.getString(_kUserToken);
+  }
 }
