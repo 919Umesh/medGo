@@ -13,12 +13,4 @@ class ProfileRepository {
     debugPrint(response.toString());
     return ProfileModel.fromJson(response);
   }
-
-  Future<ProfileModel> updateProfile(ProfileModel profile) async {
-    final response = await SupabaseHelper.upsert(
-      table: 'profiles',
-      data: profile.toJson(),
-    );
-    return ProfileModel.fromJson(response);
-  }
 }

@@ -15,12 +15,3 @@ class FetchProfileEvent extends ProfileEvent {
   @override
   List<Object> get props => [profileId];
 }
-
-class UpdateProfileEvent extends ProfileEvent {
-  final ProfileModel profile;
-
-  const UpdateProfileEvent(this.profile);
-
-  @override
-  List<Object> get props => [profile];
-}

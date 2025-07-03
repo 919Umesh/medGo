@@ -2,7 +2,7 @@ class ProfileModel {
   final String profileId;
   final DateTime createdAt;
   final String fullName;
-  final String phoneNumber;
+  final int phoneNumber; // changed to int
   final String email;
   final String? profilePicture;
   final String gender;
@@ -22,7 +22,7 @@ class ProfileModel {
       profileId: json['profile_id'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       fullName: json['full_name'] as String,
-      phoneNumber: json['phone_number'] as String,
+      phoneNumber: json['phone_number'] as int, // directly cast
       email: json['email'] as String,
       profilePicture: json['profile_picture'] as String?,
       gender: json['gender'] as String,

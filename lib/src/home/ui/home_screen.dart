@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_bloc/app/routes/route_name.dart';
+import 'package:project_bloc/src/profile/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userId;
@@ -20,8 +21,13 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(
-                  AppRoute.profileScreenPath,
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                      userId: widget.userId,
+                    ),
+                  ),
                 );
               },
               icon: Icon(Icons.add))

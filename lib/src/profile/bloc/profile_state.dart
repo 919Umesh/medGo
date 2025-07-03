@@ -20,15 +20,6 @@ class ProfileLoaded extends ProfileState {
   List<Object> get props => [profile];
 }
 
-class ProfileUpdated extends ProfileState {
-  final ProfileModel profile;
-
-  const ProfileUpdated(this.profile);
-
-  @override
-  List<Object> get props => [profile];
-}
-
 class ProfileError extends ProfileState {
   final String message;
 

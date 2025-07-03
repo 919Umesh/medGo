@@ -14,7 +14,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       : _profileRepository = ProfileRepository(),
         super(ProfileInitial()) {
     on<FetchProfileEvent>(_onFetchProfile);
-    on<UpdateProfileEvent>(_onUpdateProfile);
   }
 
   Future<void> _onFetchProfile(
@@ -24,18 +23,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final profile = await _profileRepository.fetchProfile(event.profileId);
 
       emit(ProfileLoaded(profile));
-    } catch (e) {
-      emit(ProfileError(e.toString()));
-    }
-  }
-
-  Future<void> _onUpdateProfile(
-      UpdateProfileEvent event, Emitter<ProfileState> emit) async {
-    emit(ProfileLoading());
-    try {
-      final updatedProfile =
-          await _profileRepository.updateProfile(event.profile);
-      emit(ProfileUpdated(updatedProfile));
     } catch (e) {
       emit(ProfileError(e.toString()));
     }

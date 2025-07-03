@@ -12,8 +12,8 @@ class RouteGenerator {
         return _pageTransition(child: const SplashScreen());
       case AppRoute.authScreenPath:
         return _pageTransition(child: const AuthScreen());
-      case AppRoute.profileScreenPath:
-        return _pageTransition(child: const ProfileScreen());
+      // case AppRoute.profileScreenPath:
+      //   return _pageTransition(child: const ProfileScreen());
 
       default:
         return _pageTransition(
