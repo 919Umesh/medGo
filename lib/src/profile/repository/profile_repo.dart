@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:project_bloc/core/services/supabase/supabase_helper.dart';
 import 'package:project_bloc/src/profile/model/profile_model.dart';
 
@@ -8,6 +9,8 @@ class ProfileRepository {
       column: 'profile_id',
       value: profileId,
     );
+    debugPrint('--------------profile------');
+    debugPrint(response.toString());
     return ProfileModel.fromJson(response);
   }
 

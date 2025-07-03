@@ -11,8 +11,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = locator<PrefHelper>().getUserToken();
-    Fluttertoast.showToast(msg: userId.toString());
+    final String userId = '5d349042-9cca-4b4a-99e8-169b88981b89';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -20,16 +19,13 @@ class ProfileScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              context
-                  .read<ProfileBloc>()
-                  .add(FetchProfileEvent(userId.toString()));
+              context.read<ProfileBloc>().add(FetchProfileEvent(userId));
             },
           ),
         ],
       ),
       body: BlocProvider(
-        create: (context) =>
-            ProfileBloc()..add(FetchProfileEvent(userId.toString())),
+        create: (context) => ProfileBloc()..add(FetchProfileEvent(userId)),
         child: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
             if (state is ProfileError) {

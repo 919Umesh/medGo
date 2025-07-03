@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:project_bloc/src/profile/model/profile_model.dart';
 import 'package:project_bloc/src/profile/repository/profile_repo.dart';
 
@@ -21,6 +22,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileLoading());
     try {
       final profile = await _profileRepository.fetchProfile(event.profileId);
+
       emit(ProfileLoaded(profile));
     } catch (e) {
       emit(ProfileError(e.toString()));

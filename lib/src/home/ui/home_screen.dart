@@ -20,7 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(AppRoute.profileScreenPath);
+                Navigator.of(context).pushNamed(
+                  AppRoute.profileScreenPath,
+                );
               },
               icon: Icon(Icons.add))
         ],
