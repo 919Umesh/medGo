@@ -14,7 +14,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onSignIn(SignIn event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-
     try {
       final result = await AuthRepository().signInWithEmailAndPassword(
         email: event.email,

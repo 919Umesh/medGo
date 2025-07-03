@@ -1,0 +1,67 @@
+// lib/core/services/supabase_helper.dart
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class SupabaseHelper {
+  static final SupabaseClient _client = Supabase.instance.client;
+
+  // Generic single record fetch
+  static Future<Map<String, dynamic>> fetchSingle({
+    required String table,
+    String column = 'id',
+    required String value,
+  }) async {
+    try {
+      return await _client.from(table).select().eq(column, value).single();
+    } catch (e) {
+      throw Exception('Failed to fetch from $table: $e');
+    }
+  }
+
+  // Generic multiple records fetch
+  static Future<List<dynamic>> fetchAll({
+    required String table,
+    Map<String, dynamic>? filters,
+  }) async {
+    try {
+      var query = _client.from(table).select();
+      filters?.forEach((key, value) => query = query.eq(key, value));
+      return await query;
+    } catch (e) {
+      throw Exception('Failed to fetch from $table: $e');
+    }
+  }
+
+  // Generic upsert
+  static Future<Map<String, dynamic>> upsert({
+    required String table,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      return await _client.from(table).upsert(data).select().single();
+    } catch (e) {
+      throw Exception('Failed to upsert to $table: $e');
+    }
+  }
+
+  // Authentication
+  static Future<Map<String, dynamic>> signInWithPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await _client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      if (response.user == null) throw Exception('No user returned');
+      return {
+        'userId': response.user!.id,
+        'email': response.user!.email,
+      };
+    } on AuthException catch (e) {
+      throw Exception('Auth error: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to authenticate: $e');
+    }
+  }
+}

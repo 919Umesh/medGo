@@ -1,4 +1,3 @@
-import 'package:project_bloc/core/services/api/api_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefHelper {
@@ -20,12 +19,9 @@ class PrefHelper {
     pref.clear();
   }
 
-
   Future<void> logOutPref() async {
     var pref = await _initializePrefs;
-    String tempAPI = pref.getString(_kBaseUrl) ?? APIConstants.defaultAPI;
     await removePreference();
-    await setBaseUrl(tempAPI);
   }
 
   /// Dark theme preference.
@@ -46,7 +42,6 @@ class PrefHelper {
     var pref = await _initializePrefs;
     pref.setString(_kBaseUrl, value);
   }
-
 
   /// Login status preference
   final String _kIsLogin = "IsLogin";
