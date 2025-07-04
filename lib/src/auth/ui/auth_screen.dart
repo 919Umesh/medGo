@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_bloc/app/app_assets.dart';
 import 'package:project_bloc/src/auth/bloc/auth_bloc.dart';
+import 'package:project_bloc/src/auth/ui/signup_screen.dart';
 import 'package:project_bloc/src/home/ui/home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -223,7 +224,12 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => const SignupScreen()),
+                              );
+                            },
                             child: Text(
                               'Sign Up',
                               style: GoogleFonts.poppins(
