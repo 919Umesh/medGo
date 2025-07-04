@@ -22,10 +22,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: const Text(
+          'My Profile',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
       ),
       body: _buildProfileBody(),
     );
@@ -48,8 +54,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (state is ProfileLoading) {
           return const Center(
             child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue)),
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+            ),
           );
         } else if (state is ProfileLoaded) {
           return _buildProfileView(context, state.profile);
@@ -62,18 +69,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 16),
                 Text(
                   'Failed to load profile',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 8),
-                Text(state.message,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 16),
-                ElevatedButton(
+                Text(
+                  state.message,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
                   onPressed: () {
                     context.read<ProfileBloc>().add(const FetchProfileEvent());
                   },
-                  child: const Text('Retry'),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Retry'),
                 ),
               ],
             ),
@@ -81,6 +100,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
         return Center(
           child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              foregroundColor: Colors.white,
+            ),
             onPressed: () {
               context.read<ProfileBloc>().add(const FetchProfileEvent());
             },
@@ -97,167 +120,177 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          children: [
+            _buildProfileHeader(context, profile),
+            const SizedBox(height: 30),
+            _buildInfoSection(context, profile, dateFormat),
+            const SizedBox(height: 30),
+            _buildActionButtons(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader(BuildContext context, ProfileModel profile) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 60,
+          backgroundColor: Colors.deepPurple.shade100,
+          backgroundImage: profile.profilePicture != null
+              ? NetworkImage(profile.profilePicture!)
+              : const AssetImage('assets/default_avatar.png') as ImageProvider,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          profile.fullName,
+          style: const TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          profile.email,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoSection(
+      BuildContext context, ProfileModel profile, DateFormat dateFormat) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 5,
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
       child: Column(
         children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            decoration: BoxDecoration(
-              color: theme.primaryColor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: profile.profilePicture != null
-                        ? NetworkImage(profile.profilePicture!)
-                        : const AssetImage('assets/default_avatar.png')
-                            as ImageProvider,
-                    backgroundColor: Colors.grey[200],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  profile.fullName,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  profile.email,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ],
-            ),
+          _buildDetailTile(
+            context,
+            icon: Icons.phone_outlined,
+            title: 'Phone Number',
+            value: profile.phoneNumber.toString(),
+            color: Colors.green,
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                _buildDetailCard(
-                  context,
-                  icon: Icons.phone,
-                  title: 'Phone Number',
-                  value: profile.phoneNumber.toString(),
-                ),
-                const SizedBox(height: 16),
-                _buildDetailCard(
-                  context,
-                  icon: Icons.person,
-                  title: 'Gender',
-                  value: profile.gender,
-                ),
-                const SizedBox(height: 16),
-                _buildDetailCard(
-                  context,
-                  icon: Icons.calendar_today,
-                  title: 'Member Since',
-                  value: dateFormat.format(profile.createdAt),
-                ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      backgroundColor: theme.primaryColor,
-                    ),
-                    onPressed: () {
-                      // Handle edit profile
-                    },
-                    child: const Text(
-                      'Edit Profile',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          const Divider(height: 20),
+          _buildDetailTile(
+            context,
+            icon: Icons.person_outline,
+            title: 'Gender',
+            value: profile.gender,
+            color: Colors.blue,
+          ),
+          const Divider(height: 20),
+          _buildDetailTile(
+            context,
+            icon: Icons.calendar_today_outlined,
+            title: 'Member Since',
+            value: dateFormat.format(profile.createdAt),
+            color: Colors.orange,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildDetailCard(
+  Widget _buildDetailTile(
     BuildContext context, {
     required IconData icon,
     required String title,
     required String value,
+    required Color color,
   }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: color, size: 24),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: Theme.of(context).primaryColor,
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+      title: Text(
+        title,
+        style: TextStyle(color: Colors.grey[600]),
+      ),
+      subtitle: Text(
+        value,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Colors.black,
         ),
       ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.edit_outlined),
+            label: const Text('Edit Profile'),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              backgroundColor: Colors.deepPurple,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () {
+              // Handle edit profile
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: TextButton.icon(
+            icon: const Icon(Icons.logout),
+            label: const Text('Logout'),
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              foregroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.red.withOpacity(0.5)),
+              ),
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () {
+              // Handle logout
+            },
+          ),
+        ),
+      ],
     );
   }
 }
