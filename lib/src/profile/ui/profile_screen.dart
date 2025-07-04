@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ProfileBloc>().add(FetchProfileEvent(widget.userId));
+    context.read<ProfileBloc>();
   }
 
   @override
@@ -27,14 +27,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text('My Profile'),
         centerTitle: true,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: () {
-              context.read<ProfileBloc>().add(FetchProfileEvent(widget.userId));
-            },
-          ),
-        ],
       ),
       body: _buildProfileBody(),
     );
