@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:project_bloc/core/core.dart';
 import 'package:project_bloc/src/profile/model/profile_model.dart';
 import 'package:project_bloc/src/profile/repository/profile_repo.dart';
 
@@ -20,7 +22,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       FetchProfileEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
     try {
-      final profile = await _profileRepository.fetchProfile(event.profileId);
+      final userId = await locator<PrefHelper>().getUserToken();
+      Fluttertoast.showToast(msg: 'UserId get:$userId');
+      final profile = await _profileRepository.fetchProfile(userId.toString());
 
       emit(ProfileLoaded(profile));
     } catch (e) {

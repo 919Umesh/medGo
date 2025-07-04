@@ -9,8 +9,6 @@ class ProfileRepository {
       column: 'profile_id',
       value: profileId,
     );
-    debugPrint('--------------profile------');
-    debugPrint(response.toString());
     return ProfileModel.fromJson(response);
   }
 }

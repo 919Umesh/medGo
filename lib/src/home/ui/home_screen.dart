@@ -14,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    Fluttertoast.showToast(msg: widget.userId);
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
