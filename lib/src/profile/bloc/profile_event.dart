@@ -7,11 +7,10 @@ abstract class ProfileEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// Changed to parameterless since we're getting userId from PrefHelper
 class FetchProfileEvent extends ProfileEvent {
-  final String profileId;
-
-  const FetchProfileEvent(this.profileId);
+  const FetchProfileEvent();
 
   @override
-  List<Object> get props => [profileId];
+  List<Object> get props => [];
 }

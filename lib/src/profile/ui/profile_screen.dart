@@ -15,7 +15,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ProfileBloc>();
+    // Dispatch the fetch event when the screen initializes
+    context.read<ProfileBloc>().add(const FetchProfileEvent());
   }
 
   @override
@@ -47,9 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (state is ProfileLoading) {
           return const Center(
             child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            ),
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue)),
           );
         } else if (state is ProfileLoaded) {
           return _buildProfileView(context, state.profile);
@@ -69,11 +69,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<ProfileBloc>().add(const FetchProfileEvent());
+                  },
+                  child: const Text('Retry'),
+                ),
               ],
             ),
           );
         }
-        return const Center(child: Text('No profile data available'));
+        return Center(
+          child: ElevatedButton(
+            onPressed: () {
+              context.read<ProfileBloc>().add(const FetchProfileEvent());
+            },
+            child: const Text('Load Profile'),
+          ),
+        );
       },
     );
   }
@@ -86,7 +99,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          // Profile Header with Avatar
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 24),
@@ -137,43 +149,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-
-          // Profile Details
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                // Phone Number Card
                 _buildDetailCard(
                   context,
                   icon: Icons.phone,
                   title: 'Phone Number',
                   value: profile.phoneNumber.toString(),
                 ),
-
                 const SizedBox(height: 16),
-
-                // Gender Card
                 _buildDetailCard(
                   context,
                   icon: Icons.person,
                   title: 'Gender',
                   value: profile.gender,
                 ),
-
                 const SizedBox(height: 16),
-
-                // Member Since Card
                 _buildDetailCard(
                   context,
                   icon: Icons.calendar_today,
                   title: 'Member Since',
                   value: dateFormat.format(profile.createdAt),
                 ),
-
                 const SizedBox(height: 32),
-
-                // Edit Profile Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

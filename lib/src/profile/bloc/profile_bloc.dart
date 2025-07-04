@@ -23,9 +23,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileLoading());
     try {
       final userId = await locator<PrefHelper>().getUserToken();
-      Fluttertoast.showToast(msg: 'UserId get:$userId');
+      Fluttertoast.showToast(msg: 'UserId get: $userId');
       final profile = await _profileRepository.fetchProfile(userId.toString());
-
       emit(ProfileLoaded(profile));
     } catch (e) {
       emit(ProfileError(e.toString()));
