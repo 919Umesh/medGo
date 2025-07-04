@@ -17,7 +17,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize and fetch profile data
     context.read<ProfileBloc>().add(FetchProfileEvent(widget.userId));
   }
 
