@@ -57,7 +57,7 @@ class _AuthScreenState extends State<AuthScreen> {
             );
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => HomeScreen(userId: state.userId),
+                builder: (context) => HomeScreen(),
               ),
             );
           } else if (state is AuthError) {
