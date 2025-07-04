@@ -9,6 +9,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<SignIn>(_onSignIn);
+    on<SignUp>(_onSignUp);
   }
 
   Future<void> _onSignIn(SignIn event, Emitter<AuthState> emit) async {
@@ -25,6 +26,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         userId: result.userId!,
         email: result.email,
       ));
+    } catch (e) {
+      emit(AuthError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onSignUp(SignUp event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final result = await AuthRepository().signUpWithEmail(
+        email: event.email,
+        password: event.password,
+        userMetadata:
+            event.fullName != null ? {'full_name': event.fullName} : null,
+      );
+
+      if (result.error != null) {
+        emit(AuthError(message: result.error!));
+        return;
+      }
+
+      if (result.requiresConfirmation) {
+        emit(RegistrationPending(
+          email: result.email!,
+          message: 'Please check your email for confirmation',
+        ));
+      } else {
+        locator<PrefHelper>().setIsLogin(true);
+        await locator<PrefHelper>().setUserToken(result.userId.toString());
+        emit(Authenticated(
+          message: 'Registration successful',
+          userId: result.userId!,
+          email: result.email!,
+        ));
+      }
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }

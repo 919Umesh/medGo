@@ -60,4 +60,36 @@ class SupabaseHelper {
       throw Exception('Failed to authenticate: $e');
     }
   }
+
+  static Future<Map<String, dynamic>> signUpWithEmail({
+    required String email,
+    required String password,
+    Map<String, dynamic>? userMetadata,
+  }) async {
+    try {
+      final response = await _client.auth.signUp(
+        email: email,
+        password: password,
+        data: userMetadata,
+      );
+      if (response.user == null && response.session == null) {
+        return {
+          'email': email,
+          'requiresConfirmation': true,
+        };
+      } else if (response.user == null) {
+        throw Exception('No user returned');
+      }
+
+      return {
+        'userId': response.user!.id,
+        'email': response.user!.email,
+        'requiresConfirmation': false,
+      };
+    } on AuthException catch (e) {
+      throw Exception('Auth error: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to register: $e');
+    }
+  }
 }

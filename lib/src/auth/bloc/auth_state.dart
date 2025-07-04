@@ -26,6 +26,19 @@ class Authenticated extends AuthState {
   List<Object?> get props => [message, userId, email];
 }
 
+class RegistrationPending extends AuthState {
+  final String email;
+  final String message;
+
+  const RegistrationPending({
+    required this.email,
+    required this.message,
+  });
+
+  @override
+  List<Object?> get props => [email, message];
+}
+
 class AuthError extends AuthState {
   final String message;
 
