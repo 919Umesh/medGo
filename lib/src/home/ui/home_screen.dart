@@ -23,9 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
-                      userId: widget.userId,
-                    ),
+                    builder: (context) => ProfileScreen(),
                   ),
                 );
               },

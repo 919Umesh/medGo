@@ -5,9 +5,7 @@ import 'package:project_bloc/src/profile/bloc/profile_bloc.dart';
 import 'package:project_bloc/src/profile/model/profile_model.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String userId;
-
-  const ProfileScreen({super.key, required this.userId});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -71,14 +69,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    context
-                        .read<ProfileBloc>()
-                        .add(FetchProfileEvent(widget.userId));
-                  },
-                  child: const Text('Retry'),
-                ),
               ],
             ),
           );
