@@ -39,6 +39,15 @@ class RegistrationPending extends AuthState {
   List<Object?> get props => [email, message];
 }
 
+class OtpVerification extends AuthState {
+  final String email;
+
+  const OtpVerification({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
 class AuthError extends AuthState {
   final String message;
 

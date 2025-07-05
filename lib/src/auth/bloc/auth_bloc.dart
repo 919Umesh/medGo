@@ -11,6 +11,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignIn>(_onSignIn);
     on<SignUp>(_onSignUp);
     on<ResendConfirmation>(_onResendConfirmation);
+    on<VerifyOtp>(_onVerifyOtp);
   }
 
   Future<void> _onSignIn(SignIn event, Emitter<AuthState> emit) async {
@@ -74,6 +75,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(RegistrationPending(
         email: event.email,
         message: 'Confirmation email resent. Please check your inbox.',
+      ));
+    } catch (e) {
+      emit(AuthError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onVerifyOtp(VerifyOtp event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final result = await AuthRepository().verifyOtp(
+        email: event.email,
+        otp: event.otp,
+      );
+
+      locator<PrefHelper>().setIsLogin(true);
+      await locator<PrefHelper>().setUserToken(result.userId.toString());
+      emit(Authenticated(
+        message: 'Verification successful',
+        userId: result.userId!,
+        email: result.email,
       ));
     } catch (e) {
       emit(AuthError(message: e.toString()));

@@ -30,12 +30,29 @@ class AuthRepository {
       );
 
       return SignUpModel(
-        userId: response['userId'],
         email: response['email'],
         requiresConfirmation: response['requiresConfirmation'] ?? false,
       );
     } catch (e) {
       return SignUpModel(error: e.toString());
+    }
+  }
+
+  Future<AuthModel> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      final response = await SupabaseHelper.verifyOtp(
+        email: email,
+        otp: otp,
+      );
+      return AuthModel(
+        userId: response['userId'],
+        email: response['email'],
+      );
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 

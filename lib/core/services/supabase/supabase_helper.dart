@@ -67,27 +67,21 @@ class SupabaseHelper {
     Map<String, dynamic>? userMetadata,
   }) async {
     try {
-      final response = await _client.auth.signUp(
+      // First sign up with email/password
+      final signUpResponse = await _client.auth.signUp(
         email: email,
         password: password,
         data: userMetadata,
-        emailRedirectTo:
-            'io.supabase.flutter://login-callback/', // Deep link for mobile
       );
 
-      if (response.user == null && response.session == null) {
-        return {
-          'email': email,
-          'requiresConfirmation': true,
-        };
-      } else if (response.user == null) {
-        throw Exception('No user returned');
-      }
+      // Then send OTP
+      await _client.auth.signInWithOtp(
+        email: email,
+      );
 
       return {
-        'userId': response.user!.id,
-        'email': response.user!.email,
-        'requiresConfirmation': false,
+        'email': email,
+        'requiresConfirmation': true,
       };
     } on AuthException catch (e) {
       throw Exception('Auth error: ${e.message}');
@@ -98,14 +92,37 @@ class SupabaseHelper {
 
   static Future<void> resendConfirmationEmail(String email) async {
     try {
-      await _client.auth.resend(
-        type: OtpType.signup,
+      await _client.auth.signInWithOtp(
         email: email,
       );
     } on AuthException catch (e) {
       throw Exception('Auth error: ${e.message}');
     } catch (e) {
-      throw Exception('Failed to resend confirmation: $e');
+      throw Exception('Failed to resend OTP: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      final response = await _client.auth.verifyOTP(
+        email: email,
+        token: otp,
+        type: OtpType.signup,
+      );
+
+      if (response.user == null) throw Exception('No user returned');
+
+      return {
+        'userId': response.user!.id,
+        'email': response.user!.email,
+      };
+    } on AuthException catch (e) {
+      throw Exception('Auth error: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to verify OTP: $e');
     }
   }
 }

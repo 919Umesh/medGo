@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_bloc/src/auth/bloc/auth_bloc.dart';
 import 'package:project_bloc/src/auth/ui/email_confirmation_screen.dart';
+import 'package:project_bloc/src/auth/ui/otp_verification_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -40,7 +41,7 @@ class _SignupScreenState extends State<SignupScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => EmailConfirmationScreen(
+                builder: (context) => OtpVerificationScreen(
                   email: state.email,
                 ),
               ),
