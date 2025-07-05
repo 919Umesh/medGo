@@ -73,14 +73,21 @@ class SupabaseHelper {
         data: userMetadata,
       );
 
-      await _client.auth.signInWithOtp(
-        email: email,
-      );
-
-      return {
-        'email': email,
-        'requiresConfirmation': true,
-      };
+      // Check if user needs email confirmation
+      if (signUpResponse.user != null &&
+          signUpResponse.user!.emailConfirmedAt == null) {
+        return {
+          'email': email,
+          'requiresConfirmation': true,
+        };
+      } else {
+        // User is already confirmed (rare case)
+        return {
+          'userId': signUpResponse.user!.id,
+          'email': signUpResponse.user!.email,
+          'requiresConfirmation': false,
+        };
+      }
     } on AuthException catch (e) {
       throw Exception('Auth error: ${e.message}');
     } catch (e) {
@@ -90,7 +97,8 @@ class SupabaseHelper {
 
   static Future<void> resendConfirmationEmail(String email) async {
     try {
-      await _client.auth.signInWithOtp(
+      await _client.auth.resend(
+        type: OtpType.signup,
         email: email,
       );
     } on AuthException catch (e) {
@@ -110,9 +118,7 @@ class SupabaseHelper {
         token: otp,
         type: OtpType.signup,
       );
-
       if (response.user == null) throw Exception('No user returned');
-
       return {
         'userId': response.user!.id,
         'email': response.user!.email,

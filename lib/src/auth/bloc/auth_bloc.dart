@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:project_bloc/core/injection/injection_helper.dart';
 import 'package:project_bloc/core/services/sharepref/share_pref.dart';
 import 'package:project_bloc/src/auth/repository/auth_repo.dart';
@@ -45,6 +46,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (result.error != null) {
         emit(AuthError(message: result.error!));
+        debugPrint('--------Start Result---------');
+        debugPrint('Error: ${result.error!}');
+        debugPrint('----------------EndResult-----------');
         return;
       }
 

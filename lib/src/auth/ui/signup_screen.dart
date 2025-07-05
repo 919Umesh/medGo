@@ -36,7 +36,7 @@ class _SignupScreenState extends State<SignupScreen> {
           if (state is AuthError) {
             Fluttertoast.showToast(msg: "Error: ${state.message}");
           } else if (state is RegistrationPending) {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => OtpVerificationScreen(
@@ -45,7 +45,8 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
             );
           } else if (state is Authenticated) {
-            Fluttertoast.showToast(msg: 'Success');
+            Fluttertoast.showToast(msg: 'Registration successful!');
+            Navigator.pop(context); // Go back to login or navigate to home
           }
         },
         child: SafeArea(
