@@ -67,14 +67,12 @@ class SupabaseHelper {
     Map<String, dynamic>? userMetadata,
   }) async {
     try {
-      // First sign up with email/password
       final signUpResponse = await _client.auth.signUp(
         email: email,
         password: password,
         data: userMetadata,
       );
 
-      // Then send OTP
       await _client.auth.signInWithOtp(
         email: email,
       );

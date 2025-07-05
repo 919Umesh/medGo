@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:project_bloc/core/services/supabase/supabase_helper.dart';
 import 'package:project_bloc/src/auth/model/auth_model.dart';
 import 'package:project_bloc/src/auth/model/signup_model.dart';
@@ -29,6 +30,7 @@ class AuthRepository {
         userMetadata: userMetadata,
       );
 
+      debugPrint('${response['requiresConfirmation']}');
       return SignUpModel(
         email: response['email'],
         requiresConfirmation: response['requiresConfirmation'] ?? false,
