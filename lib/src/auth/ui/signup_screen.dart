@@ -34,9 +34,7 @@ class _SignupScreenState extends State<SignupScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            Fluttertoast.showToast(msg: "Error: ${state.message}");
           } else if (state is RegistrationPending) {
             Navigator.pushReplacement(
               context,
