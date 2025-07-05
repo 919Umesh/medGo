@@ -1,4 +1,5 @@
-// lib/src/auth/ui/otp_verification_screen.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,11 +16,39 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  int _remainingCooldown = 0;
+  Timer? _cooldownTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startCooldownTimer(30); // Initial 30-second cooldown
+  }
 
   @override
   void dispose() {
     _otpController.dispose();
+    _cooldownTimer?.cancel();
     super.dispose();
+  }
+
+  void _startCooldownTimer(int seconds) {
+    _remainingCooldown = seconds;
+    _cooldownTimer?.cancel();
+    _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingCooldown > 0) {
+          _remainingCooldown--;
+        } else {
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  void _resendOtp() {
+    context.read<AuthBloc>().add(ResendConfirmation(email: widget.email));
+    _startCooldownTimer(60); // Reset cooldown to 60 seconds
   }
 
   @override
@@ -29,12 +58,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            Fluttertoast.showToast(msg: "Error: ${state.message}");
+            // Handle rate limiting error
+            if (state.message.contains('you can only request this after')) {
+              final seconds = int.tryParse(
+                      state.message.split('after ')[1].split(' ')[0]) ??
+                  60;
+              _startCooldownTimer(seconds);
+            }
+            Fluttertoast.showToast(msg: state.message);
           } else if (state is Authenticated) {
             Fluttertoast.showToast(msg: 'Verification successful!');
             Navigator.popUntil(context, (route) => route.isFirst);
-          } else if (state is RegistrationPending) {
-            Fluttertoast.showToast(msg: state.message);
           }
         },
         child: Padding(
@@ -98,19 +132,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                BlocBuilder<AuthBloc, AuthState>(
-                  builder: (context, state) {
-                    return TextButton(
-                      onPressed: state is AuthLoading
-                          ? null
-                          : () {
-                              context.read<AuthBloc>().add(
-                                    ResendConfirmation(email: widget.email),
-                                  );
-                            },
-                      child: const Text('Resend OTP'),
-                    );
-                  },
+                TextButton(
+                  onPressed: _remainingCooldown > 0 ? null : _resendOtp,
+                  child: _remainingCooldown > 0
+                      ? Text('Resend OTP in $_remainingCooldown seconds')
+                      : const Text('Resend OTP'),
                 ),
               ],
             ),

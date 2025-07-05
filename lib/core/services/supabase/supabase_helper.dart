@@ -67,27 +67,23 @@ class SupabaseHelper {
     Map<String, dynamic>? userMetadata,
   }) async {
     try {
+      // First create user with email/password
       final signUpResponse = await _client.auth.signUp(
         email: email,
         password: password,
         data: userMetadata,
       );
 
-      // Check if user needs email confirmation
-      if (signUpResponse.user != null &&
-          signUpResponse.user!.emailConfirmedAt == null) {
-        return {
-          'email': email,
-          'requiresConfirmation': true,
-        };
-      } else {
-        // User is already confirmed (rare case)
-        return {
-          'userId': signUpResponse.user!.id,
-          'email': signUpResponse.user!.email,
-          'requiresConfirmation': false,
-        };
-      }
+      // Then send OTP (without creating new user)
+      await _client.auth.signInWithOtp(
+        email: email,
+        shouldCreateUser: false,
+      );
+
+      return {
+        'email': email,
+        'requiresConfirmation': true,
+      };
     } on AuthException catch (e) {
       throw Exception('Auth error: ${e.message}');
     } catch (e) {
@@ -97,9 +93,9 @@ class SupabaseHelper {
 
   static Future<void> resendConfirmationEmail(String email) async {
     try {
-      await _client.auth.resend(
-        type: OtpType.signup,
+      await _client.auth.signInWithOtp(
         email: email,
+        shouldCreateUser: false,
       );
     } on AuthException catch (e) {
       throw Exception('Auth error: ${e.message}');
@@ -118,7 +114,9 @@ class SupabaseHelper {
         token: otp,
         type: OtpType.signup,
       );
+
       if (response.user == null) throw Exception('No user returned');
+
       return {
         'userId': response.user!.id,
         'email': response.user!.email,

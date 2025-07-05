@@ -29,10 +29,7 @@ class AuthRepository {
         password: password,
         userMetadata: userMetadata,
       );
-      debugPrint('--------ResponseSignUp-----------');
 
-      debugPrint('${response['requiresConfirmation']}');
-      debugPrint('--------End-----------');
       return SignUpModel(
         email: response['email'],
         requiresConfirmation: response['requiresConfirmation'] ?? false,

@@ -55,7 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (result.requiresConfirmation) {
         emit(RegistrationPending(
           email: result.email!,
-          message: 'Please check your email for confirmation',
+          message: 'Please check your email for OTP',
         ));
       } else {
         locator<PrefHelper>().setIsLogin(true);
@@ -78,7 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await AuthRepository().resendConfirmationEmail(event.email);
       emit(RegistrationPending(
         email: event.email,
-        message: 'Confirmation email resent. Please check your inbox.',
+        message: 'OTP resent. Please check your inbox.',
       ));
     } catch (e) {
       emit(AuthError(message: e.toString()));
