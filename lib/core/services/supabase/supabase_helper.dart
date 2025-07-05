@@ -71,7 +71,10 @@ class SupabaseHelper {
         email: email,
         password: password,
         data: userMetadata,
+        emailRedirectTo:
+            'io.supabase.flutter://login-callback/', // Deep link for mobile
       );
+
       if (response.user == null && response.session == null) {
         return {
           'email': email,
@@ -90,6 +93,19 @@ class SupabaseHelper {
       throw Exception('Auth error: ${e.message}');
     } catch (e) {
       throw Exception('Failed to register: $e');
+    }
+  }
+
+  static Future<void> resendConfirmationEmail(String email) async {
+    try {
+      await _client.auth.resend(
+        type: OtpType.signup,
+        email: email,
+      );
+    } on AuthException catch (e) {
+      throw Exception('Auth error: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to resend confirmation: $e');
     }
   }
 }

@@ -29,3 +29,12 @@ class SignUp extends AuthEvent {
   @override
   List<Object?> get props => [email, password, fullName];
 }
+
+class ResendConfirmation extends AuthEvent {
+  final String email;
+
+  ResendConfirmation({required this.email});
+
+  @override
+  List<Object> get props => [email];
+}

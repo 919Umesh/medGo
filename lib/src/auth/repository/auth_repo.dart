@@ -38,4 +38,8 @@ class AuthRepository {
       return SignUpModel(error: e.toString());
     }
   }
+
+  Future<void> resendConfirmationEmail(String email) async {
+    await SupabaseHelper.resendConfirmationEmail(email);
+  }
 }

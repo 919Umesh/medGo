@@ -10,6 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<SignIn>(_onSignIn);
     on<SignUp>(_onSignUp);
+    on<ResendConfirmation>(_onResendConfirmation);
   }
 
   Future<void> _onSignIn(SignIn event, Emitter<AuthState> emit) async {
@@ -60,6 +61,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           email: result.email!,
         ));
       }
+    } catch (e) {
+      emit(AuthError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onResendConfirmation(
+      ResendConfirmation event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await AuthRepository().resendConfirmationEmail(event.email);
+      emit(RegistrationPending(
+        email: event.email,
+        message: 'Confirmation email resent. Please check your inbox.',
+      ));
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }

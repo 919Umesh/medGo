@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project_bloc/src/auth/bloc/auth_bloc.dart';
+import 'package:project_bloc/src/auth/ui/email_confirmation_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -36,8 +37,13 @@ class _SignupScreenState extends State<SignupScreen> {
               SnackBar(content: Text(state.message)),
             );
           } else if (state is RegistrationPending) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EmailConfirmationScreen(
+                  email: state.email,
+                ),
+              ),
             );
           } else if (state is Authenticated) {
             Fluttertoast.showToast(msg: 'Success');

@@ -33,6 +33,9 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="io.supabase.flutter"
+                   android:host="login-callback" />
                 <data android:scheme="kpg" android:host="com.example.project_bloc" />
             </intent-filter>
         </activity>
